@@ -1,5 +1,6 @@
 # PiLapse
-Transform your Raspberry Pi in a Timelapse machine!
+Transform your Raspberry Pi in a Timelapse machine!  
+**Status**: Alpha
 
 ### Terminal
 This terminal version help you to control the period and frequency for a timelapse.
