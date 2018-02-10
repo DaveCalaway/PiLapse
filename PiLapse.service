@@ -1,0 +1,14 @@
+[Unit]
+Description=Get PiLapse service running at boot
+
+[Service]
+ExecStart=/home/pi/PiLapse/PiLapse.py
+Restart=always
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=PiLapse
+User=pi
+Group=pi
+
+[Install]
+WantedBy=multi-user.target

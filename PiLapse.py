@@ -55,6 +55,7 @@ def button_state():
 # ---- MAIN PROGRAM ----
 while True:
     terminal = False
+    print("GO")
     # BUTTON OR TERMINAL?
     while True:
         sleep(1)
@@ -89,6 +90,7 @@ while True:
             print ('preview')
             camera.start_preview()
             input('Press any key to start.')
+            camera.stop_preview()
         num = [3, 2, 1]
         for i in range(len(num)):
             print (num[i])
@@ -112,7 +114,6 @@ while True:
             #print(currentSec)
             #print( (int(period)*60)+currentTime )
             if(currentSec > (int(period) * 60) + currentTime):
-                # print('salta')
                 print('End cature.')
                 break
             sleep(int(freq) * 60)
@@ -130,4 +131,3 @@ while True:
     else:
         # blink color
         led.off()
-    button_thread.join()

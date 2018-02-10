@@ -11,6 +11,13 @@ import shutil
 #COPY THE ENTIRE FOLDER
 shutil.copytree(os.getcwd() + "PiLapse","/home/pi/")
 
+#COPY THE SERVICE
+shutil.copy(os.getcwd() + "PiLaps.service","/etc/systemd/system/")
+
 #ADD PERMISSION
-permission = ("sudo chmod 755 -R /home/pi/PiLapse")
-os.system(permission)
+permission = ["sudo systemctl start PiLapse.service",
+              "sudo systemctl enable PiLapse.service",
+              "sudo chmod 755 -R /home/pi/PiLapse"]
+
+for i in range(len(permission)):
+    os.system(permission[i])
