@@ -21,20 +21,20 @@ the_lock = threading.Lock()
 camera = PiCamera(resolution=(1280, 720))
 
 b_status = False
+old_status = False
 
 #---- BUTTON THREAD ----
-def button():
+def button(): # https://goo.gl/S4miRc
     global b_status, led
-    b_status = False
-    button = Button(3) # IN PULL UP BY DEFAULT
+    button = Button(3)  # IN PULL UP BY DEFAULT
     while True:
-        if button.is_pressed:
-            the_lock.acquire()
-            b_status = True
-            the_lock.release()
-            led.on()
-            delay(1)
-            led.off()
+        button.wait_for_press() # Pause the script until the device is activated
+        the_lock.acquire()
+        b_status = not(b_status)
+        the_lock.release()
+        led.on()
+        sleep(1)
+        led.off()
 
 
 # button thread GO!
@@ -43,13 +43,17 @@ button_thread.start()
 
 # button read function
 def button_state():
+    global old_status, b_status
+    val = False
     the_lock.acquire()
-    # button
-    if b_status:
-        return True
+    #print("button_state: " + str(b_status))
+    if b_status != old_status:
+        val = True
     else:
-        return False
+        val = False
+    old_status = b_status
     the_lock.release()
+    return val
 
 
 # ---- MAIN PROGRAM ----
@@ -59,13 +63,11 @@ while True:
     # BUTTON OR TERMINAL?
     while True:
         sleep(1)
-        the_lock.acquire()
         # BUTTON
-        if b_status:
-            print("button mode")
-            freq = 1
-        the_lock.release()
-        if b_status:
+        #print(button_state())
+        if button_state():
+            print("Button mode")
+            freq = 60
             break
 
         # TERMINAL
@@ -74,17 +76,16 @@ while True:
             # LOAD INFO FROM THE FILE
             data_file = json.load(open('workfile.json'))
             period = int(data_file["period"])
-            #print(period)
+            # print(period)
             freq = int(data_file["freq"])
-            #print(freq)
+            # print(freq)
             preview = int(data_file["preview"])
             terminal = True
             # CLEAR FILE
             os.remove('workfile.json')
             break
 
-
-    # preview & COUNTDOWN
+    # Preview & COUNTDOWN
     if terminal:
         if preview:
             print ('preview')
@@ -96,31 +97,30 @@ while True:
             print (num[i])
             sleep(1)
     else:
-        led.on()
-        sleep(1)
-        led.off()
-        led.on()
-        sleep(1)
-        led.off()
+        for c in range(0,3):
+            led.on()
+            sleep(1)
+            led.off()
+            sleep(1)
 
     # CAPTURE
     previousSec = 0
     if terminal:
-        currentTime = int(round(time.time()))
+        currentTime = int(round(time.time())) # seconds
     for filename in camera.capture_continuous('img{counter:03d}.jpg'):
         if terminal:
             print('Captured %s' % filename)
             currentSec = int(round(time.time()))
-            #print(currentSec)
+            # print(currentSec)
             #print( (int(period)*60)+currentTime )
-            if(currentSec > (int(period) * 60) + currentTime):
+            if(currentSec > (period * 60) + currentTime):
                 print('End cature.')
                 break
-            sleep(int(freq) * 60)
-        if not button_state:
-             print("End cature button")
-             #blink color
-             break
+            sleep(freq)
+        if button_state():
+            print("End cature button")
+            # blink color
+            break
 
     # MAKE A VIDEO THIS PICS
     # https://goo.gl/UDfCHz

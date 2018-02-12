@@ -10,7 +10,7 @@ import json
 print ('Welcome to PiLaps terminal mode!\n')
 
 period = input('The period of a Timelaps in minuts: ')
-freq = input('The frequency of capture in minuts: ')
+freq = input('The frequency of capture in seconds: ')
 preview = input('Do you want a preview? Y/N  -  You need a monitor! ')
 
 if (preview == 'y' or preview == 'Y'):
