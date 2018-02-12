@@ -33,7 +33,7 @@ def button(): # https://goo.gl/S4miRc
         b_status = not(b_status)
         the_lock.release()
         led.on()
-        sleep(1)
+        sleep(2)
         led.off()
 
 
@@ -46,13 +46,13 @@ def button_state():
     global old_status, b_status
     val = False
     the_lock.acquire()
-    #print("button_state: " + str(b_status))
     if b_status != old_status:
         val = True
     else:
         val = False
     old_status = b_status
     the_lock.release()
+    #print("button_state: " + str(val))
     return val
 
 
@@ -67,7 +67,7 @@ while True:
         #print(button_state())
         if button_state():
             print("Button mode")
-            freq = 60
+            freq = 1
             break
 
         # TERMINAL
@@ -116,10 +116,10 @@ while True:
             if(currentSec > (period * 60) + currentTime):
                 print('End cature.')
                 break
-            sleep(freq)
+        sleep(freq)
         if button_state():
             print("End cature button")
-            # blink color
+            led.off()
             break
 
     # MAKE A VIDEO THIS PICS
