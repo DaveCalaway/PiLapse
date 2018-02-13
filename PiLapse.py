@@ -20,6 +20,8 @@ from gpiozero import LED, Button  # https://goo.gl/VLH86f
 led = LED(17)
 the_lock = threading.Lock()
 camera = PiCamera(resolution=(1280, 720))
+camera.vflip = True # vertical flip
+camera.hflip = True # horizontal flip
 
 b_status = False
 old_status = False
