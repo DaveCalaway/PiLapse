@@ -10,6 +10,7 @@ import os
 import sys
 import json
 import time
+import datetime
 import threading
 from time import sleep
 from picamera import PiCamera  # https://goo.gl/s8qhDZ
@@ -68,21 +69,27 @@ while True:
         if button_state():
             print("Button mode")
             freq = 1
+            now = datetime.datetime.now()
+            folder = now.strftime("%Y_%m_%d-%H%M")
+            os.makedirs(folder)
+            os.chdir("/home/pi/PiLapse/"+folder) # MOVE TO THE PROJECT'S FOLDER
             break
 
         # TERMINAL
         if os.path.isfile('workfile.json'):  # does the json file exist?
+            terminal = True
             print("terminal mode")
             # LOAD INFO FROM THE FILE
             data_file = json.load(open('workfile.json'))
             period = int(data_file["period"])
-            # print(period)
             freq = int(data_file["freq"])
-            # print(freq)
+            dirName = data_file["dirName"]
             preview = int(data_file["preview"])
-            terminal = True
             # CLEAR FILE
             os.remove('workfile.json')
+            # JUMP IN TO THE NEW FOLDER
+            os.makedirs(dirName)
+            os.chdir("/home/pi/PiLapse/"+dirName) # MOVE TO THE PROJECT'S FOLDER
             break
 
     # Preview & COUNTDOWN
@@ -102,6 +109,7 @@ while True:
             sleep(1)
             led.off()
             sleep(1)
+
 
     # CAPTURE
     previousSec = 0
@@ -129,5 +137,7 @@ while True:
     if terminal:
         print("Video done.")
     else:
-        # blink color
         led.off()
+
+    # RETURN TO ROOT FOLDER
+    os.chdir("/home/pi/PiLapse/")

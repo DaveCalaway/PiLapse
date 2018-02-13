@@ -11,6 +11,7 @@ print ('Welcome to PiLaps terminal mode!\n')
 
 period = input('The period of a Timelaps in minuts: ')
 freq = input('The frequency of capture in seconds: ')
+dirName = input('Enter name s dir: ')
 preview = input('Do you want a preview? Y/N  -  You need a monitor! ')
 
 if (preview == 'y' or preview == 'Y'):
@@ -20,7 +21,6 @@ else:
 
 # crate a json file
 with open('workfile.json', 'w') as outfile:
-    json_string = {"period": int(period), "freq": int(
-        freq), "preview": int(preview)}
+    json_string = {"period": int(period), "freq": int(freq),"dirName": dirName, "preview": int(preview)}
     json.dump(json_string, outfile)
     outfile.close()
