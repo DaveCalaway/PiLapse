@@ -6,7 +6,7 @@
 #   sudo apt-get install libav-tools
 # Git: DaveCalaway: https://goo.gl/9r6bwz
 import os
-#import os.path
+import subprocess
 import sys
 import json
 import time
@@ -59,8 +59,23 @@ def button_state():
     return val
 
 
+# CAMERA CONNECTION TEST
+def camera_present():
+    output = str(subprocess.check_output("vcgencmd get_camera", shell=True))
+    if output.find("supported=1"):
+        if output.find("detected=1"):
+            return 1
+    else:
+        return 0
+
+
+
 # ---- MAIN PROGRAM ----
 while True:
+    if not camera_present():
+        # CAMERA NOT CONNECTED
+        break
+
     terminal = False
     print("GO")
     # BUTTON OR TERMINAL?

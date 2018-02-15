@@ -8,11 +8,8 @@
 import os
 import shutil
 
-#COPY THE ENTIRE FOLDER
-shutil.copytree(os.getcwd() + "PiLapse","/home/pi/")
-
 #COPY THE SERVICE
-shutil.copy(os.getcwd() + "PiLaps.service","/etc/systemd/system/")
+shutil.copy(os.getcwd() + "/PiLaps.service","/etc/systemd/system/")
 
 #ADD PERMISSION
 permission = ["sudo systemctl start PiLapse.service",

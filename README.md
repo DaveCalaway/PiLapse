@@ -1,8 +1,14 @@
 # PiLapse
 Transform your Raspberry Pi in a Timelapse machine!  
-**Status**: Alpha
+**Status**: Beta
 
 ### Install & Run
+#Preliminal steps:
+Run this command on terminal: "vcgencmd get_camera"
+**Supported** and **Detected** must be **1**, or the script does not run.   
+IF Supported is 0, run this command on terminal "sudo raspi-config" and enable the camera.   
+If Detected is 0, the camera is not connected to the Raspi.   
+
 Install the script by running the "Install.py".  
 The script will start autonomous every time the RPi boot.   
 
@@ -12,7 +18,7 @@ This terminal version help you to control the period and frequency for a timelap
 You can run it by run the "PiLapse_terminal.py" and follow the guide.   
 
 
-### Button - future steps -
+### Button
 This Daemon version help you to control the TimeLapse with an external button.   
 
 ----------
