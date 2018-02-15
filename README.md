@@ -3,7 +3,7 @@ Transform your Raspberry Pi in a Timelapse machine!
 **Status**: Beta
 
 ### Install & Run
-# Preliminal steps
+#### Preliminal steps
 Run this command on terminal: "vcgencmd get_camera"
 **Supported** and **Detected** must be **1**, or the script does not run.   
 IF Supported is 0, run this command on terminal "sudo raspi-config" and enable the camera.   
