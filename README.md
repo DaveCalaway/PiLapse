@@ -20,8 +20,8 @@ You can run it by run the "PiLapse_terminal.py" and follow the guide.
 
 
 ### Button
-This Daemon version help you to control the TimeLapse with an external button.   
-![img](https://github.com/DaveCalaway/PiLapse/blob/master/image/button.png | width=48)
+This Daemon version help you to control the TimeLapse with an external button.  
+<img src="https://github.com/DaveCalaway/PiLapse/blob/master/image/button.png" width="400">
 
 
 ----------
