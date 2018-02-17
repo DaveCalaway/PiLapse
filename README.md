@@ -19,12 +19,13 @@ The script will start autonomously every time the RPi boot.
 
 
 ### Terminal mode
-This terminal version help you to control the period, frequency and folder name for a timelapse.
+This terminal version help you to control the period, frequency and folder name for a timelapse.  
 You can run it by run the `python3 PiLapse_terminal.py` and follow the guide.   
 
 
 ### Button mode
-The Daemon version help you to control the TimeLapse with an external button.  
+The Daemon version help you to control the TimeLapse with an external button, it take 1 pic every 10 second by default.   
+You can change this default period by opening the `PiLapse.py` file and edit the *VARIABLES* -> freq_button.  
 It made a folder called "year-month-day time".  
 The Daemon run continuously.   
 <img src="https://github.com/DaveCalaway/PiLapse/blob/master/image/button.png" width="400">
@@ -33,7 +34,7 @@ The Daemon run continuously.
 ### Standard file size
 The RPi Camera has a resolution of 1280, 720. This is a default size for photos and Timelapse:  
 <img src="https://github.com/DaveCalaway/PiLapse/blob/master/image/output_dimension.png" width="400">  
-If you want to change those, open the `PiLapse.py` and edit the *VARIABLES*.  
+If you want to change those, open the `PiLapse.py` file and edit the *VARIABLES*.  
 
 ----------
 *DaveCalaway*
