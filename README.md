@@ -4,14 +4,11 @@ Transform your Raspberry Pi in a Timelapse machine!
 
 ### Install & Run
 #### Preliminal steps
-<<<<<<< Updated upstream
 You need only this package on Raspbian Jessie: `sudo apt-get install libav-tools`  
 
 Run this command on terminal: `vcgencmd get_camera`  
-=======
 
-Run this command on terminal: "vcgencmd get_camera"
->>>>>>> Stashed changes
+
 **Supported** and **Detected** must be **1**, or the script does not run.   
 IF Supported is 0, run this command on terminal `sudo raspi-config` and enable the camera.   
 If Detected is 0, the camera is not connected to the Raspi.   
