@@ -2,13 +2,12 @@
 Description=Get PiLapse service running at boot
 
 [Service]
+Type=simple
 ExecStart=/home/pi/PiLapse/PiLapse.py
 Restart=no
 StandardOutput=syslog
 StandardError=syslog
 SyslogIdentifier=PiLapse
-User=pi
-Group=pi
 
 [Install]
 WantedBy=multi-user.target

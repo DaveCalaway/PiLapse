@@ -64,7 +64,10 @@ def camera_present():
     output = str(subprocess.check_output("vcgencmd get_camera", shell=True))
     if output.find("supported=1"):
         if output.find("detected=1"):
+            print("Test camera: OK")
             return 1
+        else:
+            return 0
     else:
         return 0
 
@@ -88,12 +91,12 @@ while True:
             freq = 1
             now = datetime.datetime.now()
             folder = now.strftime("%Y_%m_%d-%H%M")
-            os.makedirs(folder)
+            os.makedirs("/home/pi/PiLapse/"+folder)
             os.chdir("/home/pi/PiLapse/"+folder) # MOVE TO THE PROJECT'S FOLDER
             break
 
         # TERMINAL
-        if os.path.isfile('workfile.json'):  # does the json file exist?
+        if os.path.isfile('/home/pi/PiLapse/workfile.json'):  # does the json file exist?
             terminal = True
             print("terminal mode")
             # LOAD INFO FROM THE FILE
@@ -103,9 +106,9 @@ while True:
             dirName = data_file["dirName"]
             preview = int(data_file["preview"])
             # CLEAR FILE
-            os.remove('workfile.json')
+            os.remove("/home/pi/PiLapse/workfile.json")
             # JUMP IN TO THE NEW FOLDER
-            os.makedirs(dirName)
+            os.makedirs("/home/pi/PiLapse/"+dirName)
             os.chdir("/home/pi/PiLapse/"+dirName) # MOVE TO THE PROJECT'S FOLDER
             break
 
