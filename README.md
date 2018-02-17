@@ -21,7 +21,7 @@ You can run it by run the "PiLapse_terminal.py" and follow the guide.
 
 ### Button
 The Daemon version help you to control the TimeLapse with an external button.  
-The Daemon run continuously.
+The Daemon run continuously.   
 <img src="https://github.com/DaveCalaway/PiLapse/blob/master/image/button.png" width="400">
 
 
