@@ -10,8 +10,8 @@ IF Supported is 0, run this command on terminal "sudo raspi-config" and enable t
 If Detected is 0, the camera is not connected to the Raspi.   
 
 **Download** the script folder from GitHub or run this command: "git clone https://github.com/DaveCalaway/PiLapse"   
-**Install** the script by running the "Install.py".  
-The script will start autonomous every time the RPi boot.   
+**Install** The folder "PiLapse" MUST stay at "/home/pi/" and you can install the script by running the "Install.py".  
+The script will start autonomously every time the RPi boot.
 
 
 ### Terminal
@@ -20,7 +20,8 @@ You can run it by run the "PiLapse_terminal.py" and follow the guide.
 
 
 ### Button
-This Daemon version help you to control the TimeLapse with an external button.  
+The Daemon version help you to control the TimeLapse with an external button.  
+The Daemon run continuously.
 <img src="https://github.com/DaveCalaway/PiLapse/blob/master/image/button.png" width="400">
 
 
