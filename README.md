@@ -16,7 +16,10 @@ If Detected is 0, the camera is not connected to the Raspi.
 
 **Download** the script folder from GitHub or run this command: `git clone https://github.com/DaveCalaway/PiLapse`   
 **Install** The folder "PiLapse" MUST stay at "/home/pi/" and you can install the script by running the `python3 Install.py`.  
-The script will start autonomously every time the RPi boot.
+The script will start autonomously every time the RPi boot.  
+
+If do you want to use a RGB led, check if it's an Anode or Cathode common!  
+If it's an Anode common, the code is ok, but if you have an Cathode common, open the `PiLapse.py` file and edit *Anode = 0* in the *VARIABLES*.  
 
 ## Operation Mode:
 ### Terminal mode
