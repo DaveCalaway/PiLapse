@@ -29,12 +29,12 @@ The Daemon version help you to control the TimeLapse with an external button, it
 You can change this default period by opening the `PiLapse.py` file and edit the *VARIABLES* -> freq_button.  
 It creates a folder called "year-month-day time".  
 The Daemon run continuously.   
-<img src="https://raw.githubusercontent.com/DaveCalaway/PiLapse/master/image/schematic_bb.jpg" width="400">
+<img src="https://raw.githubusercontent.com/DaveCalaway/PiLapse/master/image/schematic_bb.jpg" width="400" align="middle">
 
 
 ## Standard file size
 The RPi Camera has a resolution of 1280, 720. This is a default size for photos and Timelapse:  
-<img src="https://github.com/DaveCalaway/PiLapse/blob/master/image/output_dimension.png" width="400">  
+<img src="https://github.com/DaveCalaway/PiLapse/blob/master/image/output_dimension.png" width="400" align="middle">  
 If you want to change those, open the `PiLapse.py` file and edit the *VARIABLES*.  
 
 ----------
