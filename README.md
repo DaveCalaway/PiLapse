@@ -29,7 +29,7 @@ The Daemon version help you to control the TimeLapse with an external button, it
 You can change this default period by opening the `PiLapse.py` file and edit the *VARIABLES* -> freq_button.  
 It creates a folder called "year-month-day time".  
 The Daemon run continuously.   
-<img src="https://github.com/DaveCalaway/PiLapse/blob/master/image/schematic_bb.png" width="400">
+<img src="https://raw.githubusercontent.com/DaveCalaway/PiLapse/master/image/schematic_bb.jpg" width="400">
 
 
 ## Standard file size
