@@ -30,7 +30,7 @@ You can change this default period by opening the `PiLapse.py` file and edit the
 It creates a folder called "year-month-day time".  
 The Daemon run continuously.  
 <p align="center">
-<img src="https://raw.githubusercontent.com/DaveCalaway/PiLapse/master/image/schematic_bb.jpg" width="400">
+<img src="https://raw.githubusercontent.com/DaveCalaway/PiLapse/master/image/schematic_bb.png" width="400">
 </p>
 
 ## Standard file size

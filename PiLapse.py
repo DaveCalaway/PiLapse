@@ -2,7 +2,7 @@
 
 # Welcome to PiLaps deamon
 
-# Only need this pacages on Raspbian Jessie:
+# You need only this package on Raspbian Jessie:
 #   sudo apt-get install libav-tools
 # Git: DaveCalaway: https://goo.gl/9r6bwz
 import os
@@ -14,30 +14,40 @@ import datetime
 import threading
 from time import sleep
 from picamera import PiCamera  # https://goo.gl/s8qhDZ
-from gpiozero import LED, Button  # https://goo.gl/VLH86f
+from gpiozero import LEDBoard, Button  # https://goo.gl/VLH86f
 
+# --- VARIABLES ---
+# LED rgb
+Anode = 1  # long leg at 5v
+# Resolution for pics / Timelap
+Xresolution = 1280  # default: 1280
+Yresolution = 720  # default: 720
+VideoQuality = 3  # default: 3 -> from 1best to 30 worse
+# default: 1 -> creates a clip with 1 frames(pic) per seconds
+Frame_Timelapse = 1
+# In button mode, take X pic for second
+freq_button = 10  # default: 10
+# --- --- --- ---
 
-led = LED(17)
-the_lock = threading.Lock()
-camera = PiCamera(resolution=(1280, 720))
-camera.vflip = True # vertical flip
-camera.hflip = True # horizontal flip
+led = LEDBoard(red=2, green=14, blue=4)
+camera = PiCamera(resolution=(Xresolution, Yresolution))
+camera.vflip = True  # vertical flip
+camera.hflip = True  # horizontal flip
 
 b_status = False
 old_status = False
+the_lock = threading.Lock()
 
 #---- BUTTON THREAD ----
-def button(): # https://goo.gl/S4miRc
+def button():  # https://goo.gl/S4miRc
     global b_status, led
     button = Button(3)  # IN PULL UP BY DEFAULT
     while True:
-        button.wait_for_press() # Pause the script until the device is activated
+        button.wait_for_press()  # Pause the script until the device is activated
         the_lock.acquire()
         b_status = not(b_status)
         the_lock.release()
-        led.on()
         sleep(2)
-        led.off()
 
 
 # button thread GO!
@@ -71,13 +81,64 @@ def camera_present():
     else:
         return 0
 
+# LEDS RGB
+def rgb(led_state):
+    if led_state == "on":
+        if Anode:
+            led.off()
+        else:
+            led.on()
+    elif led_state == "off":
+        if Anode:
+            led.on()
+        else:
+            led.off()
+    elif led_state == "red":
+        if Anode:
+            led.green.on()
+            led.blue.on()
+            led.red.off()
+        else:
+            led.green.off()
+            led.blue.off()
+            led.red.on()
+    elif led_state == "green":
+        if Anode:
+            led.green.off()
+            led.blue.on()
+            led.red.on()
+        else:
+            led.green.on()
+            led.blue.off()
+            led.red.off()
+    elif led_state == "blue":
+        if Anode:
+            led.green.on()
+            led.blue.off()
+            led.red.on()
+        else:
+            led.green.off()
+            led.blue.on()
+            led.red.off()
+    elif led_state == "yellow":
+        if Anode:
+            led.green.off()
+            led.blue.on()
+            led.red.off()
+        else:
+            led.green.on()
+            led.blue.off()
+            led.red.on()
 
 
+rgb("off")
 # ---- MAIN PROGRAM ----
 while True:
     if not camera_present():
         # CAMERA NOT CONNECTED
+        rgb("red")
         break
+    rgb("green")
 
     terminal = False
     print("GO")
@@ -85,14 +146,15 @@ while True:
     while True:
         sleep(1)
         # BUTTON
-        #print(button_state())
+        # print(button_state())
         if button_state():
             print("Button mode")
-            freq = 1
+            freq = freq_button
             now = datetime.datetime.now()
             folder = now.strftime("%Y_%m_%d-%H%M")
-            os.makedirs("/home/pi/PiLapse/"+folder)
-            os.chdir("/home/pi/PiLapse/"+folder) # MOVE TO THE PROJECT'S FOLDER
+            os.makedirs("/home/pi/PiLapse/" + folder)
+            # MOVE TO THE PROJECT'S FOLDER
+            os.chdir("/home/pi/PiLapse/" + folder)
             break
 
         # TERMINAL
@@ -108,8 +170,9 @@ while True:
             # CLEAR FILE
             os.remove("/home/pi/PiLapse/workfile.json")
             # JUMP IN TO THE NEW FOLDER
-            os.makedirs("/home/pi/PiLapse/"+dirName)
-            os.chdir("/home/pi/PiLapse/"+dirName) # MOVE TO THE PROJECT'S FOLDER
+            os.makedirs("/home/pi/PiLapse/" + dirName)
+            # MOVE TO THE PROJECT'S FOLDER
+            os.chdir("/home/pi/PiLapse/" + dirName)
             break
 
     # Preview & COUNTDOWN
@@ -119,22 +182,17 @@ while True:
             camera.start_preview()
             input('Press any key to start.')
             camera.stop_preview()
-        num = [3, 2, 1]
-        for i in range(len(num)):
-            print (num[i])
-            sleep(1)
-    else:
-        for c in range(0,3):
-            led.on()
-            sleep(1)
-            led.off()
-            sleep(1)
-
+    for c in range(0, 3):
+        rgb("green")
+        sleep(1)
+        rgb("off")
+        sleep(1)
 
     # CAPTURE
+    rgb("blue")
     previousSec = 0
     if terminal:
-        currentTime = int(round(time.time())) # seconds
+        currentTime = int(round(time.time()))  # seconds
     for filename in camera.capture_continuous('img{counter:03d}.jpg'):
         if terminal:
             print('Captured %s' % filename)
@@ -147,17 +205,21 @@ while True:
         sleep(freq)
         if button_state():
             print("End cature button")
-            led.off()
             break
 
     # MAKE A VIDEO THIS PICS
     # https://goo.gl/UDfCHz
-    avconv = "avconv -y -r 1 -i img%03d.jpg -r 1 -vcodec libx264 -q:v 3  -vf crop=1280:720,scale=iw:ih tlfullhiqual.mp4"
+    rgb("yellow")
+
+    avconv = "avconv -y -r " + repr(Frame_Timelapse) + " -i img%03d.jpg -r " + repr(Frame_Timelapse) + " -vcodec libx264 -q:v " + repr(
+        VideoQuality) + " -vf crop=" + repr(Xresolution) + ":" + repr(Yresolution) + ",scale=iw:ih TimeLapse.mp4"
     os.system(avconv)
-    if terminal:
-        print("Video done.")
-    else:
-        led.off()
+
+    for c in range(0, 5):
+        rgb("green")
+        sleep(1)
+        rgb("green")
+        sleep(1)
 
     # RETURN TO ROOT FOLDER
     os.chdir("/home/pi/PiLapse/")

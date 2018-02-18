@@ -2,7 +2,7 @@
 
 #Auto install program
 
-#Only need this pacages on Raspbian Jessie:
+#You need only this package on Raspbian Jessie:
 #   sudo apt-get install libav-tools
 #Git: DaveCalaway: https://goo.gl/9r6bwz
 import os
