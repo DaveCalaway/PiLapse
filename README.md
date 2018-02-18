@@ -1,7 +1,11 @@
 # PiLapse
 Transform your Raspberry Pi in a Timelapse machine!  
 
-**Status**: Beta
+**Status**: Beta  
+
+<p align="center">
+<img src="https://raw.githubusercontent.com/DaveCalaway/PiLapse/master/image/beta.jpg" width="400">
+</p>
 
 ## Install & Run
 #### Preliminal steps
