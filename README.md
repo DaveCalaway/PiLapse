@@ -47,5 +47,14 @@ The RPi Camera has a resolution of 1280, 720. This is a default size for photos 
 </p>
 If you want to change those, open the `PiLapse.py` file and edit the *VARIABLES*.  
 
+## Service status
+Very useful command to control the service called "**PiLapse.service**":
+* sudo systemctl start PiLapse.service
+* sudo systemctl stop PiLapse.service
+* sudo systemctl status PiLapse.service:  
+  * This is the most useful command, that checks what the service doing
+* sudo systemctl enable PiLapse.service
+
+
 ----------
 *DaveCalaway*
