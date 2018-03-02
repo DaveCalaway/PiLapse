@@ -1,7 +1,6 @@
 # PiLapse
 Transform your Raspberry Pi in a Timelapse machine!  
 
-**Status**: Beta  
 
 <p align="center">
 <img src="https://raw.githubusercontent.com/DaveCalaway/PiLapse/master/image/beta.jpg" width="400">
@@ -55,6 +54,11 @@ Very useful command to control the service called "**PiLapse.service**":
   * This is the most useful command, that checks what the service doing
 * sudo systemctl enable PiLapse.service
 
+## Hardware test
+RasPi 1 | RasPi 2 | RasPi3
+------------ | ------------- | -------------
+not tested | Tested | not tested
+Probably works | Beta | Probably works
 
 ----------
 *DaveCalaway*
