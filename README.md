@@ -1,5 +1,6 @@
 # PiLapse
-Transform your Raspberry Pi in a Timelapse machine!  
+Transform your Raspberry Pi in a Timelapse machine!  
+Instructable guide: http://www.instructables.com/id/PiLapse-Raspberry-Pi-Timelapse/
 
 
 <p align="center">
