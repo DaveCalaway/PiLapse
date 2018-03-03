@@ -12,7 +12,7 @@ print ('Welcome to PiLaps terminal mode!\n')
 period = input('The period of a Timelaps in minuts: ')
 freq = input('The frequency of capture in seconds: ')
 dirName = input('Enter name s dir: ')
-preview = input('Do you want a preview? Y/N  -  You need a monitor! ')
+preview = input('Do you want a preview? Y/N  -  You need a startx running! ')
 
 if (preview == 'y' or preview == 'Y'):
     preview = 1

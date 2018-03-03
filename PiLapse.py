@@ -162,7 +162,7 @@ while True:
             terminal = True
             print("terminal mode")
             # LOAD INFO FROM THE FILE
-            data_file = json.load(open('workfile.json'))
+            data_file = json.load(open('/home/pi/PiLapse/workfile.json'))
             period = int(data_file["period"])
             freq = int(data_file["freq"])
             dirName = data_file["dirName"]
@@ -218,7 +218,7 @@ while True:
     for c in range(0, 5):
         rgb("green")
         sleep(1)
-        rgb("green")
+        rgb("off")
         sleep(1)
 
     # RETURN TO ROOT FOLDER
