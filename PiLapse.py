@@ -12,6 +12,7 @@ import json
 import time
 import datetime
 import threading
+import shutil
 from time import sleep
 from picamera import PiCamera  # https://goo.gl/s8qhDZ
 from gpiozero import LEDBoard, Button  # https://goo.gl/VLH86f
@@ -27,6 +28,11 @@ VideoQuality = 3  # default: 3 -> from 1best to 30 worse
 Frame_Timelapse = 1
 # In button mode, take X pic for second
 freq_button = 10  # default: 10
+# Dropbox Uploader
+# drop_setting:
+# False = leave the video and photos on Raspberry
+# True = delate the dirName with video and photos
+delate_folder = True # default : False
 # --- --- --- ---
 
 led = LEDBoard(red=2, green=14, blue=4)
@@ -36,6 +42,8 @@ camera.hflip = True  # horizontal flip
 
 b_status = False
 old_status = False
+global dirName
+global dropbox
 the_lock = threading.Lock()
 
 #---- BUTTON THREAD ----
@@ -151,10 +159,10 @@ while True:
             print("Button mode")
             freq = freq_button
             now = datetime.datetime.now()
-            folder = now.strftime("%Y_%m_%d-%H%M")
-            os.makedirs("/home/pi/PiLapse/" + folder)
+            dirName = now.strftime("%Y_%m_%d-%H%M")
+            os.makedirs("/home/pi/PiLapse/" + dirName)
             # MOVE TO THE PROJECT'S FOLDER
-            os.chdir("/home/pi/PiLapse/" + folder)
+            os.chdir("/home/pi/PiLapse/" + dirName)
             break
 
         # TERMINAL
@@ -167,6 +175,7 @@ while True:
             freq = int(data_file["freq"])
             dirName = data_file["dirName"]
             preview = int(data_file["preview"])
+            dropbox = int(data_file["dropbox"])
             # CLEAR FILE
             os.remove("/home/pi/PiLapse/workfile.json")
             # JUMP IN TO THE NEW FOLDER
@@ -217,9 +226,17 @@ while True:
 
     for c in range(0, 5):
         rgb("green")
-        sleep(1)
+        sleep(0.5)
         rgb("off")
-        sleep(1)
+        sleep(0.5)
+
 
     # RETURN TO ROOT FOLDER
     os.chdir("/home/pi/PiLapse/")
+
+    # UPLOAD TO DROPBOX
+    if dropbox:
+        dropbox_up = "./dropbox_uploader.sh upload /home/pi/PiLapse/" + dirName + " /"
+        os.system(dropbox_up)
+        if delate_folder:
+            shutil.rmtree("/home/pi/PiLapse/" + dirName)
