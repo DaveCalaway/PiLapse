@@ -41,6 +41,15 @@ The Daemon run continuously.
 <img src="https://raw.githubusercontent.com/DaveCalaway/PiLapse/master/image/schematic_bb.png" width="400">
 </p>
 
+
+## DropBox upload
+You can upload your photos and timelapse directly on DropBox. Run this comand only the first time:  
+`cd /home/pi/PiLapse/`  
+`curl "https://raw.githubusercontent.com/andreafabrizi/Dropbox-Uploader/master/dropbox_uploader.sh" -o dropbox_uploader.sh`  
+`chmod +x dropbox_uploader.sh`  
+ 
+Now run: `./dropbox_uploader.sh`  and follow the guide.
+
 ## Standard file size
 The RPi Camera has a resolution of 1280, 720. This is a default size for photos and Timelapse:  
 <p align="center">
