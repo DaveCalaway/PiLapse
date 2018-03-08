@@ -68,8 +68,8 @@ Very useful command to control the service called "**PiLapse.service**":
 ## Hardware test
 RasPi 1 | RasPi 2 | RasPi3
 ------------ | ------------- | -------------
-not tested | Tested | not tested
-Probably works | Beta | Probably works
+Tested | Tested | not tested
+BetaV0.1 | BetaV0.1 | Probably works
 
 ----------
 *DaveCalaway*
