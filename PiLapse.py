@@ -17,22 +17,25 @@ from time import sleep
 from picamera import PiCamera  # https://goo.gl/s8qhDZ
 from gpiozero import LEDBoard, Button  # https://goo.gl/VLH86f
 
-# --- VARIABLES ---
-# LED rgb
+# ----- VARIABLES -----
+# --> LED rgb
 Anode = 1  # long leg at 5v
-# Resolution for pics / Timelap
+
+# --> Resolution for pics / Timelap
 Xresolution = 1280  # default: 1280
 Yresolution = 720  # default: 720
 VideoQuality = 3  # default: 3 -> from 1best to 30 worse
-# default: 1 -> creates a clip with 1 frames(pic) per seconds
-Frame_Timelapse = 1
-# In button mode, take X pic for second
+Frame_Timelapse = 1 # default: 1 -> creates a clip with 1 frames(pic) per seconds
+
+# --> In button mode, take X pic for second
 freq_button = 10  # default: 10
-# Dropbox Uploader
-# drop_setting:
-# False = leave the video and photos on Raspberry
-# True = delate the dirName with video and photos
-delate_folder = True # default : False
+
+# --> Dropbox Uploader
+# False = leave the video and photos on Raspberry / True = delate the dirName with video and photos
+delate_timelapse = True # default : False
+
+# False = leave photo on Raspberry / True = delate photo on Raspberry
+delate_SingleShot = True
 # --- --- --- ---
 
 led = LEDBoard(red=2, green=14, blue=4)
@@ -118,7 +121,6 @@ def button_state():
         val = False
     old_status = b_status
     the_lock.release()
-    #print("button_state: " + str(val))
     return val
 
 
@@ -152,6 +154,8 @@ def button():  # https://goo.gl/S4miRc
             os.chdir("/home/pi/PiLapse/")
             dropbox_up = "./dropbox_uploader.sh upload /home/pi/PiLapse/SingleShot/" + timenow + ".jpg" + " /"
             os.system(dropbox_up)
+            if delate_SingleShot:
+                os.remove("/home/pi/PiLapse/SingleShot/" + timenow + ".jpg")
         sleep(1)
         rgb("green")
 
@@ -162,6 +166,9 @@ def button():  # https://goo.gl/S4miRc
         DeltaTime = int(round(time.time())) -  currentTime # seconds
 
         if(DeltaTime>=3 or b_status): # TimeLapse in button mode
+            if(b_status):
+                countdown(3,0.3)
+                rgb("yellow")
             the_lock.acquire()
             b_status = not(b_status)
             the_lock.release()
@@ -251,7 +258,6 @@ while True:
 
     # MAKE A VIDEO THIS PICS
     # https://goo.gl/UDfCHz
-    rgb("yellow")
 
     avconv = "avconv -y -r " + repr(Frame_Timelapse) + " -i img%03d.jpg -r " + repr(Frame_Timelapse) + " -vcodec libx264 -q:v " + repr(
         VideoQuality) + " -vf crop=" + repr(Xresolution) + ":" + repr(Yresolution) + ",scale=iw:ih TimeLapse.mp4"
@@ -268,5 +274,5 @@ while True:
         rgb("blue")
         dropbox_up = "./dropbox_uploader.sh upload /home/pi/PiLapse/" + dirName + " /"
         os.system(dropbox_up)
-        if delate_folder:
+        if delate_timelapse:
             shutil.rmtree("/home/pi/PiLapse/" + dirName)
