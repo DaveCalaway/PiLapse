@@ -42,54 +42,13 @@ camera.hflip = True  # horizontal flip
 
 b_status = False
 old_status = False
-global dirName
-global dropbox
+dropbox = 0
 the_lock = threading.Lock()
 
-#---- BUTTON THREAD ----
-def button():  # https://goo.gl/S4miRc
-    global b_status, led
-    button = Button(3)  # IN PULL UP BY DEFAULT
-    while True:
-        button.wait_for_press()  # Pause the script until the device is activated
-        the_lock.acquire()
-        b_status = not(b_status)
-        the_lock.release()
-        sleep(2)
 
+# --- FUNCTIONS ---
 
-# button thread GO!
-button_thread = threading.Thread(target=button)
-button_thread.start()
-
-# button read function
-def button_state():
-    global old_status, b_status
-    val = False
-    the_lock.acquire()
-    if b_status != old_status:
-        val = True
-    else:
-        val = False
-    old_status = b_status
-    the_lock.release()
-    #print("button_state: " + str(val))
-    return val
-
-
-# CAMERA CONNECTION TEST
-def camera_present():
-    output = str(subprocess.check_output("vcgencmd get_camera", shell=True))
-    if output.find("supported=1"):
-        if output.find("detected=1"):
-            print("Test camera: OK")
-            return 1
-        else:
-            return 0
-    else:
-        return 0
-
-# LEDS RGB
+# LEDS RGB function
 def rgb(led_state):
     if led_state == "on":
         if Anode:
@@ -138,8 +97,85 @@ def rgb(led_state):
             led.blue.off()
             led.red.on()
 
-
 rgb("off")
+
+# COUNTDOWN function
+def countdown(end, time):
+        for c in range(0, end):
+            rgb("green")
+            sleep(time)
+            rgb("off")
+            sleep(time)
+
+# button read function
+def button_state():
+    global old_status, b_status
+    val = False
+    the_lock.acquire()
+    if b_status != old_status:
+        val = True
+    else:
+        val = False
+    old_status = b_status
+    the_lock.release()
+    #print("button_state: " + str(val))
+    return val
+
+
+# CAMERA CONNECTION TEST
+def camera_present():
+    output = str(subprocess.check_output("vcgencmd get_camera", shell=True))
+    if output.find("supported=1"):
+        if output.find("detected=1"):
+            print("Test camera: OK")
+            return 1
+        else:
+            return 0
+    else:
+        return 0
+
+#---- BUTTON THREAD ----
+def button():  # https://goo.gl/S4miRc
+    global b_status, led
+    button = Button(3)  # IN PULL UP BY DEFAULT
+
+    def SingleShot():
+        print("Single Shot")
+        countdown(3,1)
+
+        now = datetime.datetime.now()
+        timenow = now.strftime("%Y_%m_%d-%H%M")
+        camera.capture('/home/pi/PiLapse/SingleShot/%s.jpg' % timenow)
+        # IS dropbox_uploader READY?
+        if os.path.isfile('/home/pi/PiLapse/dropbox_uploader.sh'):
+            rgb("blue")
+            os.chdir("/home/pi/PiLapse/")
+            dropbox_up = "./dropbox_uploader.sh upload /home/pi/PiLapse/SingleShot/" + timenow + ".jpg" + " /"
+            os.system(dropbox_up)
+        sleep(1)
+        rgb("green")
+
+    while True:
+        button.wait_for_press() # Pause the script until the device is activated
+        currentTime = int(round(time.time()))  # seconds
+        button.wait_for_release()  # Pause the script until the device is activated
+        DeltaTime = int(round(time.time())) -  currentTime # seconds
+
+        if(DeltaTime>=3 or b_status): # TimeLapse in button mode
+            the_lock.acquire()
+            b_status = not(b_status)
+            the_lock.release()
+        else: # Single shot
+            rgb("off")
+            sleep(1)
+            SingleShot()
+
+
+# button thread GO!
+button_thread = threading.Thread(target=button)
+button_thread.start()
+
+
 # ---- MAIN PROGRAM ----
 while True:
     if not camera_present():
@@ -153,6 +189,7 @@ while True:
     # BUTTON OR TERMINAL?
     while True:
         sleep(1)
+
         # BUTTON
         # print(button_state())
         if button_state():
@@ -191,14 +228,10 @@ while True:
             camera.start_preview()
             input('Press any key to start.')
             camera.stop_preview()
-    for c in range(0, 3):
-        rgb("green")
-        sleep(1)
-        rgb("off")
-        sleep(1)
+    countdown(3,1)
 
     # CAPTURE
-    rgb("blue")
+    rgb("yellow")
     previousSec = 0
     if terminal:
         currentTime = int(round(time.time()))  # seconds
@@ -224,11 +257,7 @@ while True:
         VideoQuality) + " -vf crop=" + repr(Xresolution) + ":" + repr(Yresolution) + ",scale=iw:ih TimeLapse.mp4"
     os.system(avconv)
 
-    for c in range(0, 5):
-        rgb("green")
-        sleep(0.5)
-        rgb("off")
-        sleep(0.5)
+    countdown(5,1)
 
 
     # RETURN TO ROOT FOLDER
@@ -236,6 +265,7 @@ while True:
 
     # UPLOAD TO DROPBOX
     if dropbox:
+        rgb("blue")
         dropbox_up = "./dropbox_uploader.sh upload /home/pi/PiLapse/" + dirName + " /"
         os.system(dropbox_up)
         if delate_folder:

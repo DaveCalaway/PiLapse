@@ -14,7 +14,8 @@ shutil.copy(os.getcwd() + "/PiLapse.service","/etc/systemd/system/")
 #ADD PERMISSION
 permission = ["sudo systemctl start PiLapse.service",
               "sudo systemctl enable PiLapse.service",
-              "sudo chmod 755 -R /home/pi/PiLapse"]
+              "sudo chmod 755 -R /home/pi/PiLapse",
+              "sudo mkdir /home/pi/PiLapse/SigleShot"]
 
 for i in range(len(permission)):
     os.system(permission[i])
