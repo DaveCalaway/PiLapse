@@ -253,7 +253,7 @@ while True:
                 break
         sleep(freq)
         if button_state():
-            print("End cature button")
+            print("End capture button")
             break
 
     # MAKE A VIDEO THIS PICS
